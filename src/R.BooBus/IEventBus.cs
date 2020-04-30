@@ -3,14 +3,14 @@
     public interface IEventBus
     {
 
-        void Publish(IEvent @event);
+        void Publish(Event @event);
 
         void Subscribe<TEvent, THandler>()
-            where TEvent : IEvent
+            where TEvent : Event
             where THandler : IEventHandler<TEvent>;
 
         void Unsubscribe<TEvent, THandler>()
-            where TEvent : IEvent
+            where TEvent : Event
             where THandler : IEventHandler<TEvent>;
            
 

@@ -1,6 +1,6 @@
 ﻿namespace R.BooBus.AzureServiceBus
 {
-    public interface IPersistentConection
+    public interface IPersistentConection 
     {
     }
 }

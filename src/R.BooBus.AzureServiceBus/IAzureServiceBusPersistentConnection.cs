@@ -1,6 +1,12 @@
-﻿namespace R.BooBus.AzureServiceBus
+﻿using Microsoft.Azure.ServiceBus;
+using System;
+
+namespace R.BooBus.AzureServiceBus
 {
-    interface IAzureServiceBusPersistentConnection : IPersistentConection
+    public interface IAzureServiceBusPersistentConnection<T> : IPersistentConection 
+        where T : ITopicClient
     {
+        ServiceBusConnectionStringBuilder ConnectionStringBuilder { get; }
+        T GetModel();
     }
 }

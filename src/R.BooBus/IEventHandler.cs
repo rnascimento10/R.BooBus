@@ -4,7 +4,7 @@ namespace R.BooBus.Core
 {
     
     public interface IEventHandler<in TEvent> : IEventHandler
-       where TEvent : IEvent
+       where TEvent : Event
     {
         Task Handle(TEvent @event);
     }

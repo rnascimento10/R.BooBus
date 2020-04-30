@@ -1,6 +1,6 @@
 using System;
 using Xunit;
-
+using FluentAssertions;
 namespace R.BooBus.Tests
 {
     public class AzureServiceBusEventTests
@@ -28,6 +28,16 @@ namespace R.BooBus.Tests
             var ex = Assert.Throws<ArgumentNullException>(() => new FakeEvent(topic, subscription));
 
             Assert.Contains("Subscription should not be null or empty", ex.Message);
+
+        }
+
+        [Fact]
+        public void When_isntantitate_a_event_id_and_createAt_properties_should_not_be_null() 
+        {
+            var sut = new FakeEvent("A", "B");
+
+            Assert.NotNull(sut.Id);
+            Assert.NotNull(sut.CreateAt);
 
         }
 
