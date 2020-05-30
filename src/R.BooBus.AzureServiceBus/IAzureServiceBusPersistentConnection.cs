@@ -3,7 +3,7 @@ using System;
 
 namespace R.BooBus.AzureServiceBus
 {
-    public interface IAzureServiceBusPersistentConnection<T> : IPersistentConection 
+    public interface IAzureServiceBusPersistentConnection<T> : IPersistentConnection, IDisposable
         where T : ITopicClient
     {
         ServiceBusConnectionStringBuilder ConnectionStringBuilder { get; }
