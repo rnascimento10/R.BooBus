@@ -20,8 +20,9 @@ namespace R.BooBus.Core
         public async Task Handle(string message, IServiceScope scope)
         {
             var eventData = JsonConvert.DeserializeObject(message, EventType);
-            var handler = scope.ServiceProvider.GetRequiredService(HandlerType);
             var concreteType = typeof(IEventHandler<>).MakeGenericType(EventType);
+            var handler = scope.ServiceProvider.GetRequiredService(concreteType);
+            
             await (Task)concreteType.GetMethod("Handle").Invoke(handler, new[] { eventData });
 
         }

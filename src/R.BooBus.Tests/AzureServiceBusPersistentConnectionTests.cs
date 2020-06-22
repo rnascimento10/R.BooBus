@@ -30,7 +30,7 @@ namespace R.BooBus.Tests
         }
 
         [Fact]
-        public void Should_get_a_same_topic_instance_if_does_not_is_closied_or_closing()
+        public void Should_get_a_same_topic_instance_if_does_not_is_closed_or_closing()
         {
             //Arrange
             var cn = new ServiceBusConnectionStringBuilder("Endpoint=sb://yourservicebusservice.servicebus.windows.net/;SharedAccessKeyName=Root;SharedAccessKey=yourtopicpolicykey=;EntityPath=fakeentitypath");

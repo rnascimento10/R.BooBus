@@ -14,5 +14,6 @@ namespace R.BooBus.Core
         public Guid Id { get; set; }
 
         public DateTime CreateAt { get; set; }
+
     }
 }

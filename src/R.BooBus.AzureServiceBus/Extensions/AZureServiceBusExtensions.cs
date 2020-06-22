@@ -5,14 +5,35 @@ namespace R.BooBus.AzureServiceBus.Extensions
 {
     public static class AzureServiceBusExtensions
     {
+        private static string _serviceBusConnectionString;
 
-        public static void UseAzureServiceBus(this IServiceCollection services, string serviceBusConnectionString) 
+        public static IServiceCollection UseAzureServiceBus(this IServiceCollection services, string serviceBusConnectionString)
         {
-            var connectionStringBuilder = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
-            services.AddTransient<IAzureServiceBusPersistentConnection<ITopicClient>, AzureServiceBusPersistentConnection>( x => new AzureServiceBusPersistentConnection(connectionStringBuilder));
-            services.AddTransient<IAzureServiceBus, AzureServiceBusEventBus>();
+            _serviceBusConnectionString = serviceBusConnectionString;
+            return services;
+
         }
 
-       
+
+
+        public static IServiceCollection WithTopic(this IServiceCollection services, string topicName)
+        {
+            _serviceBusConnectionString += string.Format("{0}EntityPath={1};", _serviceBusConnectionString, topicName);
+            return services;
+        }
+
+
+        public static IServiceCollection WithSubscription(this IServiceCollection services, string subscriptionName)
+        {
+            var _connectionStringBuilder = new ServiceBusConnectionStringBuilder(_serviceBusConnectionString);
+            var serviceProvider = services.BuildServiceProvider();
+
+            services.AddTransient<IAzureServiceBus, AzureServiceBusEventBus>(x => new AzureServiceBusEventBus( serviceProvider, new AzureServiceBusPersistentConnection(_connectionStringBuilder), subscriptionName));
+            return services;
+        }
+
+
+
+
     }
 }

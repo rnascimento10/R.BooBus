@@ -19,14 +19,14 @@ namespace R.BooBus.Core
         public EventBusSubscriptionManager()
         {
             _eventHandlers = new Dictionary<string, List<Subscription>>();
-           
+
         }
 
         public void AddSubscription<TEvent, THandler>()
             where TEvent : Event
             where THandler : IEventHandler<TEvent>
         {
-            AddSubscription(typeof(THandler), GetEventKey<TEvent>());
+            AddSubscription(typeof(THandler), GetEventKey<TEvent>(), typeof(TEvent));
         }
 
         public void Clear() => _eventHandlers.Clear();
@@ -48,34 +48,31 @@ namespace R.BooBus.Core
             var eventName = GetEventKey<TEvent>();
             var subsToRemove = GetSubscriptionToRemove(eventName, typeof(THandler));
 
-            if (subsToRemove != null) 
+            if (subsToRemove != null)
             {
                 RemoveSubscription(eventName, subsToRemove);
             }
         }
 
 
-        void AddSubscription(Type handlerType, string eventName, Type eventType = null) 
+        void AddSubscription(Type handlerType, string eventName, Type eventType = null)
         {
             if (!HasSubscriptions(eventName))
             {
-                    _eventHandlers.Add(eventName, new List<Subscription>());
-                    OnEventAdded?.Invoke(this, eventName);
+                _eventHandlers.Add(eventName, new List<Subscription>());
+                OnEventAdded?.Invoke(this, eventName);
             }
 
             if (_eventHandlers[eventName].Any(s => s.HandlerType == handlerType))
             {
-                    throw new ArgumentException( $"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
+                throw new ArgumentException($"Tratador {handlerType.Name} ja resgistrado para o evento '{eventName}'", nameof(handlerType));
             }
-
-
-          
             _eventHandlers[eventName].Add(Subscription.Create(handlerType, eventType));
         }
 
         void RemoveSubscription(string eventName, Subscription subsToRemove)
         {
-            if (subsToRemove != null) 
+            if (subsToRemove != null)
             {
                 _eventHandlers[eventName].Remove(subsToRemove);
                 if (!_eventHandlers[eventName].Any())
@@ -84,7 +81,7 @@ namespace R.BooBus.Core
                     OnEventRemoved?.Invoke(this, eventName);
                 }
             }
-          
+
         }
 
         Subscription GetSubscriptionToRemove(string eventName, Type handlerType)

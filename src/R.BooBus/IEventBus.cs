@@ -1,6 +1,8 @@
-﻿namespace R.BooBus.Core
+﻿using System;
+
+namespace R.BooBus.Core
 {
-    public interface IEventBus
+    public interface IEventBus : IDisposable
     {
 
         void Publish(Event @event);
