@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Company>Boole Tecnologia</Company>
+    <Authors>Renato Nascimento</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>A smart and simple library for pub/sub implementation for Microsoft Azure Service Bus</Description>
+    <PackageProjectUrl>https://github.com/rnascimento10/R.BooBus</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/rnascimento10/R.BooBus</RepositoryUrl>
+    <PackageTags>Azure Service Bus, Pub Sub, Message Driven, Bus</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
