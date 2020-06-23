@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Publisher", "Samples\Publis
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5BACA3B1-CE55-4DDB-9838-0DD2B09F1BF7}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\MonitriipHttpClient\.gitignore = ..\..\..\MonitriipHttpClient\.gitignore
-		..\..\..\MonitriipHttpClient\.travis.yml = ..\..\..\MonitriipHttpClient\.travis.yml
-		..\..\..\MonitriipHttpClient\README.md = ..\..\..\MonitriipHttpClient\README.md
+		.gitignore = .gitignore
+		.travis.yml = .travis.yml
+		readme.md = readme.md
 	EndProjectSection
 EndProject
 Global
