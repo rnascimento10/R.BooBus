@@ -1,5 +1,4 @@
-# R.BooBus [![Build Status](https://travis-ci.com/rnascimento10/R.BooBus.svg?branch=master)](https://travis-ci.com/rnascimento10/R.BooBus)
-[![NuGet Package](https://img.shields.io/nuget/v/R.Boobus.AzureServiceBus.svg)](https://www.nuget.org/packages/R.BooBus.AzureServiceBus)
+# R.BooBus [![Build Status](https://travis-ci.com/rnascimento10/R.BooBus.svg?branch=master)](https://travis-ci.com/rnascimento10/R.BooBus) [![NuGet Package](https://img.shields.io/nuget/v/R.Boobus.AzureServiceBus.svg)](https://www.nuget.org/packages/R.BooBus.AzureServiceBus)
 
 # R.BooBus.AzureServiceBus
 A smart and simple library for pub sub implementtion to Microsoft Azure Service Bus
@@ -23,7 +22,8 @@ dotnet add package R.BooBus.AzureServiceBus
 ```csharp
       //A instace of ServiceCollection 
         services
-        //sample from connectionString for Azure service bus: "Endpoint=sb://yourendpoint.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=yoursharedaccesskey;"
+        //sample from connectionString for Azure service bus:
+       // "Endpoint=sb://yourendpoint.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=yoursharedaccesskey;"
      .UseAzureServiceBus("YourConnectionString")
      //Configuring your topic name
         .WithTopic("yourtopic")
