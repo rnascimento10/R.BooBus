@@ -89,7 +89,7 @@ dotnet add package R.BooBus.AzureServiceBus
         }
         public Task Handle(MyEvent @event)
         {
-            _logger.LogInformation("Get Event from  {@event} at {time}", @event.toString(), DateTimeOffset.Now);
+            _logger.LogInformation("Get Event from  {@event} at {time}", @event.ToString(), DateTimeOffset.Now);
 
             return Task.FromResult(true);
         }
