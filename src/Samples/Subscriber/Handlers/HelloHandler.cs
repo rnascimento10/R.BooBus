@@ -15,7 +15,7 @@ namespace Subscriber.Handlers
         }
         public Task Handle(EventMessageTest @event)
         {
-            _logger.LogInformation("Obtendo evento {@event} : {time}", @event.Message, DateTimeOffset.Now);
+            _logger.LogInformation("Get Event from  {@event} at {time}", @event.Message, DateTimeOffset.Now);
 
             return Task.FromResult(true);
         }
