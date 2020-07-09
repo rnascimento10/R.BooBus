@@ -1,10 +1,23 @@
 
-language: csharp
+# Identificaçao da linguagem 
+language: csharp 
+
+# Estamos especificando qual SO deverá subir (Em nosso caso estamos relaizando este build em uma máquina com o Ubuntu xenial)
 dist: xenial
 mono: none
+#Especificamos a verSào do net core framework
 dotnet: 3.1.201
+
+# E aqui vamos restauran as dependencias do projeto
 install:
 - dotnet restore ./src/R.BooBus.sln
 script:
-- dotnet build /p:Version=1.0.1 --configuration Release ./src/R.BooBus.sln
+# Compilando em modo release e associando o numero da versao 
+- dotnet build /p:Version=1.0.2 --configuration Release ./src/R.BooBus.sln
+
+# Executando os testes automatizados
 - dotnet test ./src/R.BooBus.Tests/R.BooBus.Tests.csproj
+
+#publicando o pacote no nuget 
+- dotnet nuget push ./src/R.BooBus.AzureServiceBus/bin/Release/R.Boobus.AzureServiceBus.1.0.2.nupkg -k $PACKAGE_PUBLISH_KEY -s https://api.nuget.org/v3/index.json
+
