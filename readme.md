@@ -71,10 +71,10 @@ dotnet add package R.BooBus.AzureServiceBus
 ```
 
 6 - Subscribe to start receiving your message or unsubscribe to stop receiving then.
-```
+```csharp
     public class Worker : BackgroundService
     {
-        private IAzureServiceBus _azureServiceBus;
+        private readonly IAzureServiceBus _azureServiceBus;
 
         public Worker(IAzureServiceBus azureServiceBus)
         {
@@ -95,17 +95,17 @@ dotnet add package R.BooBus.AzureServiceBus
             return base.StopAsync(cancellationToken);
         }
     }
-```
+```csharp
 
 
-6 - Create the same event created on publish process that inherits from the Event Class of the R.Boobus.Core namespace
+7 - Create the same event created on publish process that inherits from the Event Class of the R.Boobus.Core namespace
 ```csharp
 
  public class MyEvent : Event
  {
  }
 ```
-7 - Create the event handler that implement IEventHandler<TEvent> from the R.Boobus.Core namespace
+8 - Create the event handler that implement IEventHandler<TEvent> from the R.Boobus.Core namespace
 ```csharp
  public class HelloHandler : IEventHandler<MyEvent>
     {
