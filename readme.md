@@ -68,8 +68,36 @@ dotnet add package R.BooBus.AzureServiceBus
         .WithTopic("yourtopic")
         //Configuring your subscription name
         .WithSubscription("yoursubscription");
-
 ```
+
+6 - Subscribe to start receiving your message or unsubscribe to stop receiving then.
+```
+    public class Worker : BackgroundService
+    {
+        private IAzureServiceBus _azureServiceBus;
+
+        public Worker(IAzureServiceBus azureServiceBus)
+        {
+            _azureServiceBus = azureServiceBus;
+        }
+
+       
+        public override Task StartAsync(CancellationToken cancellationToken)
+        {
+
+            _azureServiceBus.Subscribe<EventMessageTest, HelloHandler>();
+            return base.StartAsync(cancellationToken);
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            _azureServiceBus.Unsubscribe<EventMessageTest, HelloHandler>();
+            return base.StopAsync(cancellationToken);
+        }
+    }
+```
+
+
 6 - Create the same event created on publish process that inherits from the Event Class of the R.Boobus.Core namespace
 ```csharp
 

@@ -3,10 +3,10 @@ using System;
 
 namespace R.BooBus.AzureServiceBus
 {
-    public interface IAzureServiceBusPersistentConnection<T> : IPersistentConnection, IDisposable
+    public interface IAzureServiceBusPersistentConnection<T> : IPersistentConnection<T>, IDisposable
         where T : ITopicClient
     {
         ServiceBusConnectionStringBuilder ConnectionStringBuilder { get; }
-        T GetModel();
+ 
     }
 }
