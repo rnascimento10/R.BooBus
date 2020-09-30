@@ -18,7 +18,7 @@ namespace R.BooBus.AzureServiceBus.Extensions
 
         public static IServiceCollection WithTopic(this IServiceCollection services, string topicName)
         {
-            _serviceBusConnectionString += string.Format("{0}EntityPath={1};", _serviceBusConnectionString, topicName);
+            _serviceBusConnectionString = $"{_serviceBusConnectionString};EntityPath={topicName};";
             return services;
         }
 

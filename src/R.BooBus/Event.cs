@@ -5,7 +5,7 @@ namespace R.BooBus.Core
     public abstract class Event
     {
 
-        public Event()
+        protected Event()
         {
             Id = Guid.NewGuid();
             CreateAt = DateTime.Now;

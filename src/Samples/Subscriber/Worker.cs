@@ -23,13 +23,13 @@ namespace Subscriber
         public override Task StartAsync(CancellationToken cancellationToken)
         {
 
-            _azureServiceBus.Subscribe<EventMessageTest, HelloHandler>();
+            _azureServiceBus.Subscribe<PublishVideoEvent, PublishedVideoEventHandler>();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _azureServiceBus.Unsubscribe<EventMessageTest, HelloHandler>();
+            _azureServiceBus.Unsubscribe<PublishVideoEvent, PublishedVideoEventHandler>();
             return base.StopAsync(cancellationToken);
         }
     }

@@ -2,9 +2,9 @@
 
 namespace Publisher
 {
-    public class EventMessageTest : Event
+    public class PublishVideoEvent : Event
     {
-        public EventMessageTest()
+        public PublishVideoEvent()
         {
         }
 

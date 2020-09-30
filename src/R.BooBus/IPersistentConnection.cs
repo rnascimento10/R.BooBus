@@ -1,6 +1,6 @@
 ﻿namespace R.BooBus
 {
-    public interface IPersistentConnection<TModel>
+    public interface IPersistentConnection<out TModel>
     {
         TModel GetModel();
     }

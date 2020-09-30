@@ -1,11 +1,11 @@
 ﻿using Microsoft.Azure.ServiceBus;
+using System;
 
 namespace R.BooBus.AzureServiceBus
 {
     public class AzureServiceBusPersistentConnection : IAzureServiceBusPersistentConnection<ITopicClient>
     {
         protected ITopicClient _azServiceBusTopicClient;
-        public bool _isDisposed;
 
         public AzureServiceBusPersistentConnection(ServiceBusConnectionStringBuilder connectionString)
         {
@@ -14,8 +14,7 @@ namespace R.BooBus.AzureServiceBus
         }
 
         public ServiceBusConnectionStringBuilder ConnectionStringBuilder { get; }
-
-      
+        public bool IsDisposed { get; set; }
 
         public ITopicClient GetModel()
         {
@@ -30,8 +29,15 @@ namespace R.BooBus.AzureServiceBus
 
         public void Dispose()
         {
-            _isDisposed = true;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+
         }
+        protected virtual void Dispose(bool disposing)
+        {
+            IsDisposed = true;
+        }
+
 
     }
 }

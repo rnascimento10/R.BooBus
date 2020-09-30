@@ -20,11 +20,13 @@ namespace Subscriber
 
                    
                     services.AddHostedService<Worker>();
-                    services.AddTransient<IEventHandler<EventMessageTest>, HelloHandler>();
+
+                    services.AddSingleton<IEventHandler<PublishVideoEvent>, PublishedVideoEventHandler>();
                     services
-                    .UseAzureServiceBus("Endpoint=sb://yourendpoint.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=yoursharedaccesskey;")
-                    .WithTopic("yourtopic")
-                    .WithSubscription("yoursubscription");
+                    .UseAzureServiceBus("Endpoint=sb://newsgpsmonitriip.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=LzyI2BapSPyzLU/giGQ/7UTR6s9V+Ip0a5JqrHmZ75c=")
+                    .WithTopic("rboobus")
+                    .WithSubscription("PublishVideoEvent");
+
                 });
     }
 }

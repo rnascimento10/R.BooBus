@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using FluentAssertions;
 namespace R.BooBus.Tests
 {
     public class AzureServiceBusEventTests

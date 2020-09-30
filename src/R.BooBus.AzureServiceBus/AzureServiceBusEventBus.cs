@@ -12,22 +12,25 @@ namespace R.BooBus.AzureServiceBus
     public class AzureServiceBusEventBus : IAzureServiceBus
     {
        
+        private readonly ILogger<AzureServiceBusEventBus> _logger;
         private readonly IServiceProvider _provider;
         private readonly IAzureServiceBusPersistentConnection<ITopicClient> _persistentConnection;
         private readonly IEventBusSubscriptionManager _evSubscriptionManager;
         private readonly SubscriptionClient _subscriptionClient;
 
-        public string SubscriptionPropertyForFilterCondition { get; set; }
-
+       
         public AzureServiceBusEventBus(
             IServiceProvider provider,
             IAzureServiceBusPersistentConnection<ITopicClient> persitentConnection,
             string subscriptionName
             )
         {
-            
+            var loggerFactory = new LoggerFactory();
+            _logger = loggerFactory.CreateLogger<AzureServiceBusEventBus>();
+
             _provider = provider;
             _persistentConnection = persitentConnection;
+
             _evSubscriptionManager = new EventBusSubscriptionManager();
             _evSubscriptionManager.OnEventAdded += OnEventAdded;
             _evSubscriptionManager.OnEventRemoved += OnEventRemoved;
@@ -35,46 +38,9 @@ namespace R.BooBus.AzureServiceBus
             _subscriptionClient = new SubscriptionClient(persitentConnection.ConnectionStringBuilder, subscriptionName);
             _subscriptionClient.PrefetchCount = 300;
 
-           RegisterMessageListener();
+            RegisterMessageListener();
 
         }
-
-
-        private void OnEventAdded(object sender, string e)
-        {
-            var containsKey = _evSubscriptionManager.HasSubscriptions(e);
-            if (!containsKey)
-            {
-                try
-                {
-                    _subscriptionClient.AddRuleAsync(new RuleDescription
-                    {
-                        Filter = new CorrelationFilter { Label = e },
-                        Name = e
-                    }).GetAwaiter().GetResult();
-                }
-                catch (ServiceBusException ex)
-                {
-                    throw ex;
-                }
-            }
-        }
-
-        private void OnEventRemoved(object sender, string e)
-        {
-            try
-            {
-                _subscriptionClient
-                 .RemoveRuleAsync(e)
-                 .GetAwaiter()
-                 .GetResult();
-            }
-            catch (MessagingEntityNotFoundException ex)
-            {
-                throw ex;
-            }
-        }
-
 
         public void Publish(Event @event)
         {
@@ -96,7 +62,7 @@ namespace R.BooBus.AzureServiceBus
             where TEvent : Event
             where THandler : IEventHandler<TEvent>
         {
-          
+
             _evSubscriptionManager.AddSubscription<TEvent, THandler>();
         }
 
@@ -136,32 +102,75 @@ namespace R.BooBus.AzureServiceBus
                    var eventName = message.Label;
                    var messageData = Encoding.UTF8.GetString(message.Body);
 
-                
+
                    if (await ProcessEvent(eventName, messageData))
                    {
                        await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
                    }
                },
-               new MessageHandlerOptions(ExceptionReceivedHandler) { MaxConcurrentCalls = 20, AutoComplete = false });
+               new MessageHandlerOptions(ExceptionReceivedHandler) 
+               { 
+                   MaxConcurrentCalls = 20, 
+                   AutoComplete = false 
+               });
         }
 
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
-            var loggerFactory = new LoggerFactory();
-            var logger = loggerFactory.CreateLogger<AzureServiceBusEventBus>();
+            _logger.LogError($"Exception in message handling: {exceptionReceivedEventArgs.Exception}.");
 
-            logger.LogError($"Exception in message handling: {exceptionReceivedEventArgs.Exception}.");
-            
             var context = exceptionReceivedEventArgs.ExceptionReceivedContext;
-            logger.LogInformation("Exception context for troubleshooting:");
-            logger.LogInformation($"- Endpoint: {context.Endpoint}");
-            logger.LogInformation($"- Entity Path: {context.EntityPath}");
-            logger.LogInformation($"- Executing Action: {context.Action}");
+            _logger.LogInformation("Exception context for troubleshooting:");
+            _logger.LogInformation($"- Endpoint: {context.Endpoint}");
+            _logger.LogInformation($"- Entity Path: {context.EntityPath}");
+            _logger.LogInformation($"- Executing Action: {context.Action}");
 
             return Task.CompletedTask;
         }
 
+        private void OnEventAdded(object sender, string e)
+        {
+            var containsKey = _evSubscriptionManager.HasSubscriptions(e);
+            if (!containsKey)
+            {
+                try
+                {
+                    _subscriptionClient.AddRuleAsync(new RuleDescription
+                    {
+                        Filter = new CorrelationFilter { Label = e },
+                        Name = e
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ServiceBusException ex)
+                {
+                    _logger.LogCritical("Failure OnEventAdded: ", ex);
+                    throw;
+                }
+            }
+        }
+
+        private void OnEventRemoved(object sender, string e)
+        {
+            try
+            {
+                _subscriptionClient
+                 .RemoveRuleAsync(e)
+                 .GetAwaiter()
+                 .GetResult();
+            }
+            catch (MessagingEntityNotFoundException ex)
+            {
+                _logger.LogCritical("Failure onEventRemoved: ", ex);
+                throw;
+            }
+        }
+
         public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
         {
             _evSubscriptionManager.Clear();
         }

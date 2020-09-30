@@ -65,7 +65,7 @@ namespace R.BooBus.Core
 
             if (_eventHandlers[eventName].Any(s => s.HandlerType == handlerType))
             {
-                throw new ArgumentException($"Tratador {handlerType.Name} ja resgistrado para o evento '{eventName}'", nameof(handlerType));
+                throw new ArgumentException($"Handler {handlerType.Name} already register for '{eventName}'", nameof(handlerType));
             }
             _eventHandlers[eventName].Add(Subscription.Create(handlerType, eventType));
         }

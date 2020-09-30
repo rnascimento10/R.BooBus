@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Subscriber
 {
-    public class EventMessageTest : Event
+    public class PublishVideoEvent : Event
     {
-        public EventMessageTest()
+        public PublishVideoEvent()
         {
         }
 

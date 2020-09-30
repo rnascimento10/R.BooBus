@@ -23,8 +23,8 @@ namespace Publisher
             while (!stoppingToken.IsCancellationRequested)
             {
                
-                var message = new EventMessageTest();
-                message.Message = "Hello";
+                var message = new PublishVideoEvent();
+                message.Message = "This is a more one content, of net core arquitecture series.";
                 _azureServiceBus.Publish(message);
 
                 _logger.LogInformation("message send {message} at: {time}", message.Message, DateTimeOffset.Now);
@@ -32,5 +32,5 @@ namespace Publisher
                 await Task.Delay(1000, stoppingToken);
             }
         }
-    }
+    }                      
 }
